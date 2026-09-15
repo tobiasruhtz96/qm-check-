@@ -10,10 +10,26 @@ button,.btn{border:0;border-radius:14px;padding:14px 16px;font-weight:800;cursor
 .audit-row{border:1px solid var(--line);border-radius:16px;padding:15px;margin:10px 0;background:#fff}.audit-q{font-weight:700;line-height:1.45}.rating{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.rating button{padding:9px 12px;background:var(--soft);color:var(--navy)}.rating button.active{background:var(--navy);color:#fff}.rating button.d,.rating button.ko{background:#fbe3e0;color:#9b241b}
 textarea,input,select{width:100%;padding:11px;border:1px solid #d8dde5;border-radius:11px;font:inherit;background:#fff}label{font-size:12px;font-weight:800;display:block;margin:11px 0 5px}.small{font-size:12px;color:var(--muted)}.muted{color:var(--muted)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin-top:18px}.stat{padding:14px;border:1px solid var(--line);border-radius:14px;background:#fafbfc}.stat span{display:block;color:var(--muted);font-size:12px;font-weight:750;margin-bottom:4px}.stat b{display:block;font-size:25px}.score{font-size:58px;font-weight:900;line-height:1;letter-spacing:-.04em}.green{color:var(--green)}.orange{color:var(--orange)}.red{color:var(--red)}.result-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}.dist{display:grid;grid-template-columns:36px 1fr 32px;gap:10px;align-items:center;margin:10px 0;font-weight:800}.dist>div{height:9px;background:#e9edf2;border-radius:99px;overflow:hidden}.dist i{display:block;height:100%;background:var(--navy);border-radius:99px}.note{background:#f7f8fa;border-left:4px solid var(--navy);padding:13px 14px;border-radius:10px;color:var(--muted);line-height:1.45}footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}.hidden{display:none!important}@media(max-width:600px){main{padding:11px 9px 40px}.card{padding:14px;border-radius:17px}.hero{padding:19px}.question{font-size:18px}header{padding:17px 14px 19px}.brand{padding:10px 14px}}
-</style></head><body><div class="brand"><img src="brewgate-logo.png" alt="Brewgate Beer & Bites"></div>
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="QM Check">
+</head><body><div class="brand"><img src="brewgate-logo.png" alt="Brewgate Beer & Bites"></div>
 <header><div class="head-inner"><h1>QM Check – Hamburg Flughafen</h1><div class="sub">Mitarbeiter-Test & Teamleiter-Wochen-Audit</div></div></header>
 <main>
-<section id="home"><div class="card hero"><div class="small">INTERNE QM-SELBSTKONTROLLE</div><h2>Was möchtest du machen?</h2><div class="grid"><button class="role" onclick="startStaff()"><b>👤 Mitarbeiter-Test</b><span>Kurzer Wissenstest zu Hygiene, Lagerung, Temperaturen, Allergenen und den im Audit festgestellten Schwachstellen.</span></button><button class="role" onclick="startAudit()"><b>🧑‍💼 Teamleiter-Wochen-Audit</b><span>Alle 118 Kontrollpunkte direkt vor Ort prüfen, A–D / N/A / KO bewerten und Maßnahmen dokumentieren.</span></button></div></div><div class="card"><h3>Letzter Stand</h3><div id="last"></div></div><div class="card note"><strong>Hinweis zur Prozentwertung:</strong> interne Orientierung aus der Excel-Datei: A=100, B=75, C=50, D=0; N/A wird nicht gewertet. Dies ist <strong>nicht</strong> als offizielle QM-Berechnungsformel ausgewiesen.</div></section>
+<section id="home"><div class="card hero"><div class="small">INTERNE QM-SELBSTKONTROLLE</div><h2>Was möchtest du machen?</h2><div class="grid"><button class="role" onclick="startStaff()"><b>👤 Mitarbeiter-Test</b><span>Kurzer Wissenstest zu Hygiene, Lagerung, Temperaturen, Allergenen und den im Audit festgestellten Schwachstellen.</span></button><button class="role" onclick="startAudit()"><b>🧑‍💼 Teamleiter-Wochen-Audit</b><span>Alle 118 Kontrollpunkte direkt vor Ort prüfen, A–D / N/A / KO bewerten und Maßnahmen dokumentieren.</span></button></div></div><div class="card"><h3>Letzter Stand</h3><div id="last"></div></div><div class="card note"><strong>Hinweis zur Prozentwertung:</strong> interne Orientierung aus der Excel-Datei: A=100, B=75, C=50, D=0; N/A wird nicht gewertet. Dies ist <strong>nicht</strong> als offizielle QM-Berechnungsformel ausgewiesen.</div>
+<div class="card" id="installCard">
+  <h3>📱 QM Check als App</h3>
+  <p class="small">Du kannst den QM Check auf dem iPhone zum Home-Bildschirm hinzufügen und wie eine kleine App öffnen.</p>
+  <button id="installBtn" class="good" type="button">Zum Home-Bildschirm</button>
+  <p id="installHelp" class="small hidden" style="margin-top:10px">
+    Falls der Button nicht erscheint: In Safari auf <b>Teilen</b> tippen → <b>Zum Home-Bildschirm</b> → <b>Hinzufügen</b>.
+  </p>
+</div>
+</section>
 <section id="staff" class="hidden"><div class="topbar"><button class="secondary" onclick="goHome()">← Start</button><span class="badge">Mitarbeiter-Test</span></div><div class="card"><div class="topbar"><span id="staffProg">1 / 12</span><b id="staffScore">0 Punkte</b></div><div class="progress"><div id="staffBar" class="bar"></div></div><div class="section" id="staffRef"></div><div class="question" id="staffQ"></div><div class="answers" id="staffA"></div><div id="staffFeedback" class="card hidden"></div><div style="margin-top:14px"><button id="staffNext" disabled onclick="nextStaff()">Nächste Frage →</button></div></div></section>
 <section id="audit" class="hidden"><div class="topbar"><button class="secondary" onclick="goHome()">← Start</button><span class="badge">Teamleiter-Wochen-Audit</span></div><div class="card"><div class="topbar"><div><b id="auditCount">0 / 118 bewertet</b><div class="small">A=100 · B=75 · C=50 · D=0 · N/A=nicht gewertet · KO=kritisch</div></div><button class="good" onclick="finishAudit()">Auswertung anzeigen</button></div><div class="progress"><div id="auditBar" class="bar"></div></div><div id="auditList"></div></div></section>
 <section id="result" class="hidden"><div class="topbar"><button class="secondary" onclick="goHome()">← Start</button><span class="badge">Audit-Auswertung</span></div><div class="card"><div class="result-head"><div><div class="small">INTERNER WOCHENWERT</div><div id="resultScore" class="score"></div></div><div class="small" style="max-width:430px">Der Wert zeigt die aktuelle interne Orientierung. KO- und D-Bewertungen werden zusätzlich separat hervorgehoben.</div></div><p id="resultText"></p><div class="stats" id="resultStats"></div></div><div class="card"><h3>Bewertungsverteilung</h3><div id="distribution"></div></div><div class="card"><h3>Offene Maßnahmen</h3><div id="actions"></div></div><div class="card"><h3>Speichern / Weitergeben</h3><p class="small">Der aktuelle Stand wird auf diesem Gerät gespeichert. Du kannst das Ergebnis als JSON-Datei exportieren.</p><button onclick="exportData()">Ergebnis exportieren</button> <button class="secondary" onclick="startAudit()">Audit neu starten</button></div></section>
@@ -160,4 +176,29 @@ function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":
 function escapeAttr(s){return escapeHtml(s)}
 renderLast();
 
-</script></body></html>
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+}
+let deferredInstallPrompt = null;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  const btn = document.getElementById("installBtn");
+  if (btn) btn.textContent = "App installieren";
+});
+document.addEventListener("click", async (e) => {
+  if (e.target && e.target.id === "installBtn") {
+    const help = document.getElementById("installHelp");
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+    } else if (help) {
+      help.classList.toggle("hidden");
+    }
+  }
+});
+</script>
+</body></html>
