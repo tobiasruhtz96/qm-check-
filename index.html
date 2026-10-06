@@ -178,28 +178,6 @@ function finishAudit() {
   const vals=DATA.audit.map(x=>auditState[x.nr]?.rating||"");
   const unanswered=vals.filter(r=>!r).length;
   const missingPhotos=DATA.audit.filter(x=>["C","D","KO"].includes(auditState[x.nr]?.rating) && !auditState[x.nr]?.photo);
-  if(unanswered>0){
-    const first=DATA.audit.find(x=>!auditState[x.nr]?.rating);
-    alert("Die Auswertung kann erst nach vollständiger Bewertung aller 118 Kontrollpunkte erstellt werden.\n\nNoch offen: "+unanswered+" Kontrollpunkte.\n\nBitte zuerst den Punkt Nr. "+first.nr+" bewerten.");
-    const row=[...document.querySelectorAll(".audit-row")].find(el=>el.querySelector(".small")?.textContent.startsWith(first.nr+" ·"));
-    if(row) row.scrollIntoView({behavior:"smooth",block:"center"});
-    return;
-  }
-  if(missingPhotos.length>0){
-    const first=missingPhotos[0];
-    alert("Bei jeder Aufgabe/Mängelbewertung C, D oder KO ist ein Foto Pflicht.\n\nNoch ohne Foto: Kontrollpunkt "+first.nr+".\n\nBitte Foto aufnehmen und danach die Auswertung erneut öffnen.");
-    const row=[...document.querySelectorAll(".audit-row")].find(el=>el.querySelector(".small")?.textContent.startsWith(first.nr+" ·"));
-    if(row) row.scrollIntoView({behavior:"smooth",block:"center"});
-    return;
-  }
-  const photoMissing=DATA.audit.filter(x=>["C","D","KO"].includes(auditState[x.nr]?.rating) && !auditState[x.nr]?.photo);
-  if(photoMissing.length>0){
-    alert("Für jede C-, D- oder KO-Bewertung muss ein Foto dokumentiert werden.\n\nNoch ohne Foto: "+photoMissing.map(x=>"Nr. "+x.nr).join(", ")+".");
-    const first=photoMissing[0];
-    const row=[...document.querySelectorAll(".audit-row")].find(el=>el.querySelector(".small")?.textContent.startsWith(first.nr+" ·"));
-    if(row) row.scrollIntoView({behavior:"smooth",block:"center"});
-    return;
-  }
   const scored=vals.filter(r=>["A","B","C","D","KO"].includes(r));
   const points=scored.reduce((sum,r)=>sum+({A:100,B:75,C:50,D:0,KO:0}[r]||0),0);
   const max=scored.length*100;
@@ -208,22 +186,25 @@ function finishAudit() {
   const cs=vals.filter(r=>r==="C").length, bs=vals.filter(r=>r==="B").length, as=vals.filter(r=>r==="A").length;
   const na=vals.filter(r=>r==="N/A").length;
   const open=DATA.audit.filter(x=>["D","C","KO"].includes(auditState[x.nr]?.rating)).length;
-  const res={score,points,max,ko,ds,cs,bs,as,na,unanswered:0,open,date:new Date().toISOString(),state:auditState};
-  localStorage.setItem("qmLastAudit",JSON.stringify(res)); renderResult(res); show("result");
+  const res={score,points,max,ko,ds,cs,bs,as,na,unanswered,missingPhotos:missingPhotos.length,open,date:new Date().toISOString(),state:auditState};
+  localStorage.setItem("qmLastAudit",JSON.stringify(res));
+  renderResult(res); show("result");
 }
+
 function renderResult(r) {
   const el=document.getElementById("resultScore");
   el.textContent=r.score.toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1})+"%";
   el.className="score "+(r.ko>0||r.ds>0?"red":r.score>=90?"green":r.score>=80?"orange":r.score>=70?"orange":"red");
   const completeness=Math.round(((DATA.audit.length-r.unanswered)/DATA.audit.length)*1000)/10;
-  document.getElementById("resultText").innerHTML=r.ko>0?"<strong>KRITISCH:</strong> Es gibt KO-Punkte. Diese müssen unabhängig vom Gesamtprozentsatz sofort bearbeitet werden.":r.ds>0?"<strong>ACHTUNG:</strong> Es gibt D-Bewertungen. Bitte Maßnahmen einleiten und nachkontrollieren.":r.unanswered>0?"<strong>NICHT VOLLSTÄNDIG:</strong> Noch nicht alle Kontrollpunkte wurden bewertet.":"<strong>Audit abgeschlossen:</strong> Aktuell keine D- oder KO-Bewertung.";
+  document.getElementById("resultText").innerHTML=r.unanswered>0?`<strong>ZWISCHENAUSWERTUNG:</strong> ${r.unanswered} Kontrollpunkte sind noch nicht bewertet. Das Ergebnis basiert nur auf den bisher bewerteten Punkten.`:r.ko>0?"<strong>KRITISCH:</strong> Es gibt KO-Punkte. Diese müssen unabhängig vom Gesamtprozentsatz sofort bearbeitet werden.":r.ds>0?"<strong>ACHTUNG:</strong> Es gibt D-Bewertungen. Bitte Maßnahmen einleiten und nachkontrollieren.":"<strong>Audit abgeschlossen:</strong> Aktuell keine D- oder KO-Bewertung.";
   document.getElementById("resultStats").innerHTML=`
     <div class="stat"><span>Ergebnis</span><b>${r.score.toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1})}%</b></div>
     <div class="stat"><span>Bewertet</span><b>${DATA.audit.length-r.unanswered}/${DATA.audit.length}</b></div>
     <div class="stat"><span>Vollständigkeit</span><b>${completeness}%</b></div>
     <div class="stat"><span>D-Bewertungen</span><b>${r.ds}</b></div>
     <div class="stat"><span>KO-Punkte</span><b>${r.ko}</b></div>
-    <div class="stat"><span>Offene Maßnahmen</span><b>${r.open}</b></div>`;
+    <div class="stat"><span>Offene Maßnahmen</span><b>${r.open}</b></div>
+    <div class="stat"><span>Fotos fehlen</span><b>${r.missingPhotos||0}</b></div>`;
   document.getElementById("distribution").innerHTML=`
     <div class="dist"><span>A</span><div><i style="width:${r.as/(DATA.audit.length||1)*100}%"></i></div><b>${r.as}</b></div>
     <div class="dist"><span>B</span><div><i style="width:${r.bs/(DATA.audit.length||1)*100}%"></i></div><b>${r.bs}</b></div>
