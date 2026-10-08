@@ -309,8 +309,8 @@ function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":
 function escapeAttr(s){return escapeHtml(s)}
 renderLast();
 
-</script>
-<script>
+
+
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
 }
@@ -333,5 +333,5 @@ document.addEventListener("click", async (e) => {
     }
   }
 });
-</script>
-</body></html>
+
+</script></body></html>
