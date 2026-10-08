@@ -23,6 +23,12 @@ textarea,input,select{width:100%;padding:11px;border:1px solid #d8dde5;border-ra
 .rating button{min-width:52px;min-height:44px;font-size:16px}
 .rating button.d,.rating button.ko{font-weight:900}
 </style>
+
+<style id="qm-restart-style">
+.qm-restart-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border:0;border-radius:14px;background:#8b1e1e;color:#fff;font-weight:800;font-size:15px;cursor:pointer}
+.qm-restart-btn:active{transform:scale(.99)}
+</style>
+
 </head><body><div class="brand"><img src="brewgate-logo.png" alt="Brewgate Beer & Bites"></div>
 <header><div class="head-inner"><h1>QM Check – Hamburg Flughafen</h1><div class="sub">Mitarbeiter-Test & Teamleiter-Wochen-Audit</div></div></header>
 <main>
@@ -275,7 +281,52 @@ function buildReportHtml(audit){
     const photo=s.photo?`<img class="photo" src="${s.photo}" alt="Foto Kontrollpunkt ${x.nr}">`:( ["C","D","KO"].includes(s.rating) ? '<span class="missing-photo">Foto fehlt</span>' : '');
     return `<tr><td>${x.nr}</td><td>${escapeHtml(x.bereich)}</td><td><strong>${escapeHtml(s.rating||"–")}</strong></td><td>${escapeHtml(x.frage)}</td><td>${escapeHtml(s.note||"")}</td><td>${escapeHtml(s.action||"")}</td><td>${escapeHtml(s.who||"")}</td><td>${escapeHtml(s.due||"")}</td><td>${photo}</td></tr>`;
   }).join("");
-  return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Brewgate QM-Bericht</title><style>body{font-family:Arial,sans-serif;color:#172033;margin:22px;line-height:1.4}h1{margin:0 0 4px}h2{margin-top:24px}.sub{color:#687386}.box{padding:16px;border:1px solid #d9dee7;border-radius:14px;margin:16px 0}.score{font-size:48px;font-weight:900}.critical{color:#b42318}.ok{color:#18794e}.warn{color:#9a6700}table{width:100%;border-collapse:collapse;font-size:9px}th,td{border:1px solid #cfd5dd;padding:5px;text-align:left;vertical-align:top}th{background:#eef1f5}thead{display:table-header-group}.photo{display:block;max-width:140px;max-height:100px;object-fit:cover;border-radius:6px}.missing-photo{color:#b42318;font-weight:700}.sig{display:flex;gap:30px;margin-top:40px}.line{border-bottom:1px solid #555;width:220px;padding-top:28px}.note{padding:10px;background:#f6f7f9;border-left:4px solid #172033;margin:14px 0}@media print{body{margin:10mm}button{display:none}.pagebreak{break-before:page}table{font-size:8px}.photo{max-width:120px;max-height:90px}tr{break-inside:avoid}}</style></head><body><h1>Brewgate Beer &amp; Bites – QM-Check</h1><div class="sub">Hamburg Flughafen · Wochen-Audit · erstellt am ${date}</div><div class="box"><div class="score ${audit.ko>0||audit.ds>0?'critical':audit.score>=80?'ok':'warn'}">${audit.score.toLocaleString("de-DE",{minimumFractionDigits:1,maximumFractionDigits:1})}%</div><strong>${traffic}</strong><p>Bewertet: ${DATA.audit.length-audit.unanswered}/${DATA.audit.length} · A: ${audit.as} · B: ${audit.bs} · C: ${audit.cs} · D: ${audit.ds} · KO: ${audit.ko} · N/A: ${audit.na}</p><p>Interne Punkte: ${audit.points} / ${audit.max}</p></div><div class="note"><strong>Bewertungssystem:</strong> interne Orientierung A=100, B=75, C=50, D=0, KO=0; N/A wird nicht gewertet. Dies ist keine offiziell dokumentierte QM-Berechnungsformel.</div><h2>Alle 118 Kontrollpunkte</h2><table><thead><tr><th>Nr.</th><th>Bereich</th><th>Bew.</th><th>Kontrollpunkt</th><th>Beobachtung</th><th>Maßnahme</th><th>Verantwortlich</th><th>Frist</th><th>Foto</th></tr></thead><tbody>${allRows}</tbody></table><div class="sig"><div><div class="line"></div>Teamleitung</div><div><div class="line"></div>Datum</div></div></body></html>`;
+  return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Brewgate QM-Bericht</title><style>body{font-family:Arial,sans-serif;color:#172033;margin:22px;line-height:1.4}h1{margin:0 0 4px}h2{margin-top:24px}.sub{color:#687386}.box{padding:16px;border:1px solid #d9dee7;border-radius:14px;margin:16px 0}.score{font-size:48px;font-weight:900}.critical{color:#b42318}.ok{color:#18794e}.warn{color:#9a6700}table{width:100%;border-collapse:collapse;font-size:9px}th,td{border:1px solid #cfd5dd;padding:5px;text-align:left;vertical-align:top}th{background:#eef1f5}thead{display:table-header-group}.photo{display:block;max-width:140px;max-height:100px;object-fit:cover;border-radius:6px}.missing-photo{color:#b42318;font-weight:700}.sig{display:flex;gap:30px;margin-top:40px}.line{border-bottom:1px solid #555;width:220px;padding-top:28px}.note{padding:10px;background:#f6f7f9;border-left:4px solid #172033;margin:14px 0}@media print{body{margin:10mm}button{display:none}.pagebreak{break-before:page}table{font-size:8px}.photo{max-width:120px;max-height:90px}tr{break-inside:avoid}}</style>
+<style id="qm-restart-style">
+.qm-restart-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border:0;border-radius:14px;background:#8b1e1e;color:#fff;font-weight:800;font-size:15px;cursor:pointer}
+.qm-restart-btn:active{transform:scale(.99)}
+</style>
+
+</head><body><h1>Brewgate Beer &amp; Bites – QM-Check</h1><div class="sub">Hamburg Flughafen · Wochen-Audit · erstellt am ${date}</div><div class="box"><div class="score ${audit.ko>0||audit.ds>0?'critical':audit.score>=80?'ok':'warn'}">${audit.score.toLocaleString("de-DE",{minimumFractionDigits:1,maximumFractionDigits:1})}%</div><strong>${traffic}</strong><p>Bewertet: ${DATA.audit.length-audit.unanswered}/${DATA.audit.length} · A: ${audit.as} · B: ${audit.bs} · C: ${audit.cs} · D: ${audit.ds} · KO: ${audit.ko} · N/A: ${audit.na}</p><p>Interne Punkte: ${audit.points} / ${audit.max}</p></div><div class="note"><strong>Bewertungssystem:</strong> interne Orientierung A=100, B=75, C=50, D=0, KO=0; N/A wird nicht gewertet. Dies ist keine offiziell dokumentierte QM-Berechnungsformel.</div><h2>Alle 118 Kontrollpunkte</h2><table><thead><tr><th>Nr.</th><th>Bereich</th><th>Bew.</th><th>Kontrollpunkt</th><th>Beobachtung</th><th>Maßnahme</th><th>Verantwortlich</th><th>Frist</th><th>Foto</th></tr></thead><tbody>${allRows}</tbody></table><div class="sig"><div><div class="line"></div>Teamleitung</div><div><div class="line"></div>Datum</div></div>
+<script id="qm-restart-script">
+(function(){
+  function newAudit(){
+    if(!confirm("Audit wirklich neu starten?\n\nAlle bisherigen Antworten, Fotos und Zwischenstände dieses Audits werden gelöscht.")) return;
+    localStorage.removeItem("qmAuditState");
+    localStorage.removeItem("qmLastAudit");
+    // Staff test remains untouched.
+    if (typeof startAudit === "function") startAudit();
+    else location.reload();
+  }
+  window.qmNewAudit = newAudit;
+
+  function addRestart(){
+    if(document.getElementById("qm-restart-btn")) return;
+    const btn=document.createElement("button");
+    btn.id="qm-restart-btn";
+    btn.type="button";
+    btn.className="qm-restart-btn";
+    btn.textContent="🔄 Neustart";
+    btn.onclick=newAudit;
+
+    // Put it into the audit and result top bars.
+    document.querySelectorAll("#audit .topbar, #result .topbar").forEach(bar=>{
+      const wrap=document.createElement("div");
+      wrap.style.display="flex";
+      wrap.style.gap="8px";
+      wrap.style.flexWrap="wrap";
+      wrap.appendChild(btn.cloneNode(true));
+      wrap.firstChild.onclick=newAudit;
+      bar.appendChild(wrap);
+    });
+  }
+
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",addRestart);
+  else addRestart();
+})();
+</script>
+
+</body></html>`;
 }
 
 function printReport(){
@@ -322,4 +373,43 @@ document.addEventListener("click", async (e) => {
   }
 });
 </script>
+
+<script id="qm-restart-script">
+(function(){
+  function newAudit(){
+    if(!confirm("Audit wirklich neu starten?\n\nAlle bisherigen Antworten, Fotos und Zwischenstände dieses Audits werden gelöscht.")) return;
+    localStorage.removeItem("qmAuditState");
+    localStorage.removeItem("qmLastAudit");
+    // Staff test remains untouched.
+    if (typeof startAudit === "function") startAudit();
+    else location.reload();
+  }
+  window.qmNewAudit = newAudit;
+
+  function addRestart(){
+    if(document.getElementById("qm-restart-btn")) return;
+    const btn=document.createElement("button");
+    btn.id="qm-restart-btn";
+    btn.type="button";
+    btn.className="qm-restart-btn";
+    btn.textContent="🔄 Neustart";
+    btn.onclick=newAudit;
+
+    // Put it into the audit and result top bars.
+    document.querySelectorAll("#audit .topbar, #result .topbar").forEach(bar=>{
+      const wrap=document.createElement("div");
+      wrap.style.display="flex";
+      wrap.style.gap="8px";
+      wrap.style.flexWrap="wrap";
+      wrap.appendChild(btn.cloneNode(true));
+      wrap.firstChild.onclick=newAudit;
+      bar.appendChild(wrap);
+    });
+  }
+
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",addRestart);
+  else addRestart();
+})();
+</script>
+
 </body></html>
